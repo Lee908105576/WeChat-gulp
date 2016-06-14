@@ -1,10 +1,11 @@
 //引入组件
 var gulp=require('gulp'),
     less=require('gulp-less'),
-    minicss=require('gulp-minify-css'),
-    tinypng=require('gulp-tinypng'),
+    minicss=require('gulp-minify-css'),//压缩css
+    tinypng=require('gulp-tinypng'),//使用tinypng插件压缩png和jpg图片
     notify=require('gulp-notify'),//编译错误时，显示通知，保证watch继续
     autoprefixer=require('gulp-autoprefixer'),//添加前缀css
+    orig=require('gulp-rev-orig'),//自动在html中添加版本控制
     reload=require('gulp-livereload'),//保存刷新页面
     concat=require('gulp-concat'),//合并js
     uglify=require('gulp-uglify'),//压缩js代码
@@ -13,6 +14,10 @@ var gulp=require('gulp'),
 
 gulp.task('html',function(){
     return gulp.src('./src/*.html')
+        .pipe(orig({//版本号为watch完成时的时间
+          revType: 'date',
+          dateFormat: 'yymmddHHmm'
+        }))
         .pipe(gulp.dest('./dist'))
         .pipe(reload())
 })
@@ -21,6 +26,7 @@ gulp.task('js',function(){
     return gulp.src('./src/js/*.js')
         .pipe(concat('all.js'))//合并后的名字
         .pipe(uglify())//压缩js
+        .pipe(gulp.dest('./src/js'))
         .pipe(gulp.dest('./dist/js'))
 })
 
@@ -36,7 +42,7 @@ gulp.task('less',function(){
         })(err);
         this.emit('end');
     }
-    return gulp.src('./src/less/*.less')
+    return gulp.src('./src/css/*.less')
         //通过plumber将错误信息提交给notify显示出来
         .pipe(plumber({errorHandler: onError}))
         .pipe(less())
@@ -46,6 +52,7 @@ gulp.task('less',function(){
         }))
         .pipe(concat('all.css'))
         .pipe(minicss())    //压缩css
+        .pipe(gulp.dest('./src/css'))
         .pipe(gulp.dest('./dist/css'))
         //成功后notify通知
         .pipe(notify({ // Add gulpif here
