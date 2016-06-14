@@ -1,0 +1,50 @@
+//文字超出后出现...
+.runout() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//将px转换成rem
+.px2rem(@name,@px) {
+    @{name}: @px/75*1rem;
+}
+
+//根据IOS设备的不同dpr，设置不同的字体显示的大小
+.fontset(@name,@px) {
+    @{name}: round(@px)/2 * 1px;
+  [data-dpr="2"] & {
+      @{name}: round(@px)* 1px;
+  }
+  [data-dpr="3"] & {
+      @{name}: round(@px *3.333/2) * 1px;
+  }
+}
+
+//设置div中的常用属性(距离顶部的距离，宽度，高度，字体大小，字体颜色，字体对其方式)
+.setdiv(@top,@width,@height,@fsize,@fcolor,@align){
+  .px2rem(margin-top,@top);
+  .px2rem(width,@width);
+  .px2rem(height,@height);
+  .px2rem(line-height,@height);
+  .fontset(font-size,@fsize);
+  color: @fcolor;
+  text-align: @align;
+}
+
+//重置默认样式和优化body
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+body{
+  font-family: 'Helvetica','San Francisco','PingFang SC','Roboto','NotoSansHans Medium','Heiti SC','helvetica neue LT','Microsoft YaHei';
+  -webkit-tap-highlight-color: rgba(0,0,0,0);//屏蔽ios和安卓下点击元素出现阴影效果
+  -webkit-appearance:none;//屏幕输入框怪异的内阴影
+  -webkit-overflow-scrolling: touch; //滚动流畅
+  -webkit-user-select: none; //禁止用户选择页面文字
+  -webkit-touch-callout: none; //禁用链接弹出窗口
+}
