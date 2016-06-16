@@ -81,7 +81,7 @@ gulp.task('watch',function(){
     gulp.watch('./src/js/*.js',function(){
         gulp.run('js')
     })
-    gulp.watch('./src/less/*.less',function(){
+    gulp.watch('./src/css/*.less',function(){
         gulp.run('less')
     })
     gulp.watch('./src/img/*.{png,jpg,gif,icon}',function(){
